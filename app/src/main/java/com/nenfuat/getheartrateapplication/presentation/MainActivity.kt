@@ -52,7 +52,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-        heartRateData.value = "データがありません"
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
