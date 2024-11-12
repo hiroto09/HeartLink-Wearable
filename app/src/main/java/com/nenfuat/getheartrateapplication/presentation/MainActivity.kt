@@ -63,6 +63,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     private var player:String = ""
 
+    private var sendPlayer:String = ""
+
     // Wear OS固有のID(Android ID)
     private val androidId by lazy { Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID) }
     // 心拍数の取得フラグ
@@ -147,7 +149,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                         // レスポンスの解析
                         val jsonResponse = JSONObject(response)
                         player = jsonResponse.optString("player", "不明なプレイヤー")
-
+                        sendPlayer = "プレイヤー"+player
                         withContext(Dispatchers.Main) {
                             heartRateData.value = "あなたは\nプレイヤー$player"
                             isResponseReceived.value = true
@@ -292,9 +294,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
                     // JSONオブジェクトに整数型で心拍数を追加
                     val jsonInputString = JSONObject().apply {
-                        put("id", androidId)
                         put("heartRate", heartRate)
+                        put("player", androidId)
                     }.toString()
+
+                    Log.d("SendJson",jsonInputString)
 
 
                     outputStream.use { os ->
